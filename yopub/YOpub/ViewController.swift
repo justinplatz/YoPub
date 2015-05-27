@@ -119,7 +119,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        println((cell as! TableViewCell).usernameLabel.text)
+        //println((cell as! TableViewCell).usernameLabel.text)
         
 //        var instanceOfCustomObject: CustomObject = CustomObject()
 //        instanceOfCustomObject.someProperty = "Hello World"

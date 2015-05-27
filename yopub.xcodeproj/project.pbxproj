@@ -13,13 +13,13 @@
 		099E93FA1B16256400C7B4A9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 099E93F91B16256400C7B4A9 /* Podfile */; };
 		099E93FC1B16257200C7B4A9 /* YOpub.xcworkspace in Resources */ = {isa = PBXBuildFile; fileRef = 099E93FB1B16257200C7B4A9 /* YOpub.xcworkspace */; };
 		099E94151B16260A00C7B4A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E94091B16260A00C7B4A9 /* AppDelegate.swift */; };
-		099E94171B16260A00C7B4A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 099E940C1B16260A00C7B4A9 /* Main.storyboard */; };
 		099E94191B16260A00C7B4A9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 099E940F1B16260A00C7B4A9 /* Info.plist */; };
 		099E941A1B16260A00C7B4A9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E94101B16260A00C7B4A9 /* LogInViewController.swift */; };
 		099E941B1B16260A00C7B4A9 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E94111B16260A00C7B4A9 /* SignUpViewController.swift */; };
 		099E941C1B16260A00C7B4A9 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E94121B16260A00C7B4A9 /* TableViewCell.swift */; };
 		099E941D1B16260A00C7B4A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E94131B16260A00C7B4A9 /* ViewController.swift */; };
 		099E94561B165C1800C7B4A9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 099E94551B165C1800C7B4A9 /* libz.dylib */; };
+		09F5D47A1B166BDA00E68C17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09F5D4791B166BDA00E68C17 /* Main.storyboard */; };
 		FA030D9EBB87DD3D221C9145 /* libPods-yopub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0742F05DE16528771F9EC2 /* libPods-yopub.a */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +46,6 @@
 		099E93FB1B16257200C7B4A9 /* YOpub.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = YOpub.xcworkspace; sourceTree = "<group>"; };
 		099E94071B1625D800C7B4A9 /* YOpub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YOpub-Bridging-Header.h"; sourceTree = "<group>"; };
 		099E94091B16260A00C7B4A9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = YOpub/AppDelegate.swift; sourceTree = "<group>"; };
-		099E940D1B16260A00C7B4A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		099E940F1B16260A00C7B4A9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = YOpub/Info.plist; sourceTree = "<group>"; };
 		099E94101B16260A00C7B4A9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogInViewController.swift; path = YOpub/LogInViewController.swift; sourceTree = "<group>"; };
 		099E94111B16260A00C7B4A9 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = YOpub/SignUpViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +53,7 @@
 		099E94131B16260A00C7B4A9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = YOpub/ViewController.swift; sourceTree = "<group>"; };
 		099E94141B16260A00C7B4A9 /* YOpub-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "YOpub-Bridging-Header.h"; path = "YOpub/YOpub-Bridging-Header.h"; sourceTree = "<group>"; };
 		099E94551B165C1800C7B4A9 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		09F5D4791B166BDA00E68C17 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		7E0742F05DE16528771F9EC2 /* libPods-yopub.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-yopub.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFE3D10ADCEBB55E616A3030 /* Pods-yopub.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yopub.release.xcconfig"; path = "Pods/Target Support Files/Pods-yopub/Pods-yopub.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,11 +114,11 @@
 				099E93E01B1624E800C7B4A9 /* Images.xcassets */,
 				099E93E21B1624E800C7B4A9 /* LaunchScreen.xib */,
 				099E94091B16260A00C7B4A9 /* AppDelegate.swift */,
-				099E940C1B16260A00C7B4A9 /* Main.storyboard */,
 				099E940F1B16260A00C7B4A9 /* Info.plist */,
 				099E94101B16260A00C7B4A9 /* LogInViewController.swift */,
 				099E94111B16260A00C7B4A9 /* SignUpViewController.swift */,
 				099E94121B16260A00C7B4A9 /* TableViewCell.swift */,
+				09F5D4791B166BDA00E68C17 /* Main.storyboard */,
 				099E94131B16260A00C7B4A9 /* ViewController.swift */,
 				099E94141B16260A00C7B4A9 /* YOpub-Bridging-Header.h */,
 				099E93FB1B16257200C7B4A9 /* YOpub.xcworkspace */,
@@ -247,7 +247,7 @@
 				099E94191B16260A00C7B4A9 /* Info.plist in Resources */,
 				099E93E41B1624E800C7B4A9 /* LaunchScreen.xib in Resources */,
 				099E93FC1B16257200C7B4A9 /* YOpub.xcworkspace in Resources */,
-				099E94171B16260A00C7B4A9 /* Main.storyboard in Resources */,
+				09F5D47A1B166BDA00E68C17 /* Main.storyboard in Resources */,
 				099E93FA1B16256400C7B4A9 /* Podfile in Resources */,
 				099E93E11B1624E800C7B4A9 /* Images.xcassets in Resources */,
 			);
@@ -333,15 +333,6 @@
 				099E93E31B1624E800C7B4A9 /* Base */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		099E940C1B16260A00C7B4A9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				099E940D1B16260A00C7B4A9 /* Base */,
-			);
-			name = Main.storyboard;
-			path = YOpub;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

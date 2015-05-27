@@ -84,6 +84,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return true;
     }
     
+    @IBAction func goBackTapper(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: {});
+        
+    }
     /*
     // MARK: - Navigation
     

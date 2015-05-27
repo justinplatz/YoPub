@@ -56,10 +56,8 @@ import UIKit
         
         
         client?.self = PubNub.clientWithPublishKey("demo", andSubscribeKey: "demo")
-        
-        
-        
-        
+        //client?.self.addListeners(self)
+  
         return true
     }
     

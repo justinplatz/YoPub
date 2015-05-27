@@ -199,7 +199,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="NTh-rW-D6j" kind="show" id="7yd-ov-iQc"/>
+                                            <action selector="goBackTapper:" destination="s4o-bj-cpx" eventType="touchUpInside" id="Zfq-FB-IYz"/>
                                         </connections>
                                     </button>
                                 </subviews>
