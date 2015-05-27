@@ -23,52 +23,71 @@ var friendsArray: [String] = []
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     var tokenID: NSData?
+    var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
     
     
-    private var channel = PNChannel()
-    private let config = PNConfiguration(publishKey: "demo", subscribeKey: "demo", secretKey: nil)
+    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+
+//    
+//    private var channel = PNChannel()
+//    private let config = PNConfiguration(publishKey: "demo", subscribeKey: "demo", secretKey: nil)
     
 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        PubNub.setConfiguration(self.config)
-        PubNub.connect()
-        self.channel = PNChannel.channelWithName("hi_world", shouldObservePresence: false) as! PNChannel
-        PubNub.subscribeOn([self.channel])
-        
+
+//        
+//        PubNub.setConfiguration(self.config)
+//        PubNub.connect()
+//        self.channel = PNChannel.channelWithName("hi_world", shouldObservePresence: false) as! PNChannel
+//        PubNub.subscribeOn([self.channel])
+//        
         var tokenID: NSData? {
             didSet {
                 println("In here")
-                //Add a channel to APNS
-                PubNub.enablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
-                
-                // Remove that channel from APNS
-                //PubNub.disablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
-                
-                //this will request all channels associated with this push token
-                PubNub.requestPushNotificationEnabledChannelsForDevicePushToken(tokenID,
-                    withCompletionHandlingBlock: { (var enabledChannels: [AnyObject]!, var error: PNError!) -> Void in
-                        println(enabledChannels)
-                        println(error)
-                })
-                
-                // This will dissassociate all channels with this push token in a single method call
-                //            PubNub.removeAllPushNotificationsForDevicePushToken(tokenID,
-                //                withCompletionHandlingBlock: {
-                //                    (var error: PNError!) -> Void in
-                //                    println(error)
-                //            })
-                
+//                //Add a channel to APNS
+//                PubNub.enablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
+//                
+//                // Remove that channel from APNS
+//                //PubNub.disablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
+//                
+//                //this will request all channels associated with this push token
+//                PubNub.requestPushNotificationEnabledChannelsForDevicePushToken(tokenID,
+//                    withCompletionHandlingBlock: { (var enabledChannels: [AnyObject]!, var error: PNError!) -> Void in
+//                        println(enabledChannels)
+//                        println(error)
+//                })
+//                
+//                // This will dissassociate all channels with this push token in a single method call
+//                //            PubNub.removeAllPushNotificationsForDevicePushToken(tokenID,
+//                //                withCompletionHandlingBlock: {
+//                //                    (var error: PNError!) -> Void in
+//                //                    println(error)
+//                //            })
+//                
             }
         }
+        
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        
+        
+        var navColor = UIColorFromRGB(0x3598DB)
+        navigationController?.navigationBar.barTintColor = navColor
+
         
     }
     
@@ -91,14 +110,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
         
         (cell as! TableViewCell).usernameLabel.text = friendsArray[indexPath.row] as String
-        
+        var color = UIColorFromRGB(colorsArray[indexPath.row])
+        (cell as! TableViewCell).backgroundColor = color
+
         
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
+        println((cell as! TableViewCell).usernameLabel.text)
         
+//        var instanceOfCustomObject: CustomObject = CustomObject()
+//        instanceOfCustomObject.someProperty = "Hello World"
+//        println(instanceOfCustomObject.someProperty)
+//        instanceOfCustomObject.someMethod()
+        
+  
         
     }
     

@@ -9,7 +9,7 @@
 import UIKit
 
 
-@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, PNDelegate, UIAlertViewDelegate {
+@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate, PNObjectEventListener {
     
     var window: UIWindow?
     var apnsID: NSString?
@@ -19,20 +19,23 @@ import UIKit
         }
     }
     var baseViewController: ViewController?
-    
-    
+    var client:PubNub?
+
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
         
         Parse.setApplicationId("GD3ntgZ5gyAKlWugeLZJzwbrgkyTwOZ9sEesVqOv",
             clientKey: "z1ZI3oDA6SwhnepNWg0CXy6f5ljHdmTQW1kQyd2H")
         
         var navController = window!.rootViewController! as! UINavigationController
-        println(navController)
-        println(navController.viewControllers[0])
+        //println(navController)
+        //println(navController.viewControllers[0])
         self.baseViewController = navController.viewControllers[0] as? ViewController;
         
-        PubNub.setDelegate(self)
+        //PubNub.setDelegate(self)
+        
+        
         
         if (application.respondsToSelector("isRegisteredForRemoteNotifications"))
         {
@@ -47,6 +50,14 @@ import UIKit
             println("or here")
             application.registerForRemoteNotificationTypes(.Badge | .Sound | .Alert)
         }
+        
+        
+        
+        
+        
+        client?.self = PubNub.clientWithPublishKey("demo", andSubscribeKey: "demo")
+        
+        
         
         
         return true
@@ -92,12 +103,12 @@ import UIKit
             alert.show()
         }
     }
-    
-    func pubnubClient(client: PubNub!, didReceiveMessage message: PNMessage!) {
-        println("I Got A MEssage ", message)
-        println("The message is : ",  message.message as! NSString)
-        
-    }
+//    
+//    func pubnubClient(client: PubNub!, didReceiveMessage message: PNMessage!) {
+//        println("I Got A MEssage ", message)
+//        println("The message is : ",  message.message as! NSString)
+//        
+//    }
     
     
     
