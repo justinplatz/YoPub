@@ -92,7 +92,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
       
         var image = UIImage(named: "yopubW.png")
         self.navigationItem.titleView = UIImageView(image: image)
-        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+
         client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
         client?.addListeners([self])
 
@@ -123,7 +124,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
         
-        (cell as! TableViewCell).usernameLabel.text = friendsArray[indexPath.row] as String
+        (cell as! TableViewCell).usernameLabel.text = friendsArray[indexPath.row].uppercaseString as String
+        
         var color = UIColorFromRGB(colorsArray[indexPath.row])
         (cell as! TableViewCell).backgroundColor = color
 
@@ -136,7 +138,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         var name = friendsArray[indexPath.row] as String
         
-        var myName = PFUser.currentUser()?.username
+        var myName = PFUser.currentUser()?.username?.uppercaseString
         println("the current user is ")
         println(myName)
         

@@ -77,8 +77,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                     
                     if error == nil {
                         // The find succeeded.
-                        //println("Successfully retrieved \(objects) scores.")
-                        // Do something with the found objects
                         if let objects = objects as? [PFObject] {
                             for object in objects {
                                 var friendName = object["Friend"] as! String
