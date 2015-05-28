@@ -35,7 +35,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             
             client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in
-
+                
             })
             
         }
@@ -90,6 +90,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
       
+        var image = UIImage(named: "yopubW.png")
+        self.navigationItem.titleView = UIImageView(image: image)
         
         client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
         client?.addListeners([self])
@@ -165,7 +167,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
+        
+        let myChannel = currentUser!.username
+
         currentUser = PFUser.currentUser()
+        
+        
+//        client?.removePushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion:{ (status) ->Void in
+//            if(!status.error){
+//                println("remove from channel worked ")
+//            }
+//            else{
+//                println("remove push  channel did not work******")
+//            }
+//        })
+        
     }
     
     

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0974F3DB1B178E85006A31FD /* logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 0974F3DA1B178E85006A31FD /* logout.png */; };
+		0974F3DD1B17CD87006A31FD /* yopubW.png in Resources */ = {isa = PBXBuildFile; fileRef = 0974F3DC1B17CD87006A31FD /* yopubW.png */; };
+		0974F3DF1B17CFE5006A31FD /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 0974F3DE1B17CFE5006A31FD /* launch.png */; };
 		099E93E11B1624E800C7B4A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 099E93E01B1624E800C7B4A9 /* Images.xcassets */; };
 		099E93E41B1624E800C7B4A9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 099E93E21B1624E800C7B4A9 /* LaunchScreen.xib */; };
 		099E93F01B1624E800C7B4A9 /* yopubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099E93EF1B1624E800C7B4A9 /* yopubTests.swift */; };
@@ -37,6 +39,8 @@
 /* Begin PBXFileReference section */
 		078F0222FF976511E41A9603 /* Pods-yopub.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yopub.debug.xcconfig"; path = "Pods/Target Support Files/Pods-yopub/Pods-yopub.debug.xcconfig"; sourceTree = "<group>"; };
 		0974F3DA1B178E85006A31FD /* logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logout.png; sourceTree = "<group>"; };
+		0974F3DC1B17CD87006A31FD /* yopubW.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yopubW.png; sourceTree = "<group>"; };
+		0974F3DE1B17CFE5006A31FD /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		099E93D41B1624E800C7B4A9 /* yopub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yopub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		099E93D81B1624E800C7B4A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		099E93E01B1624E800C7B4A9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -115,10 +119,12 @@
 			children = (
 				099E93E01B1624E800C7B4A9 /* Images.xcassets */,
 				099E93E21B1624E800C7B4A9 /* LaunchScreen.xib */,
+				0974F3DE1B17CFE5006A31FD /* launch.png */,
 				0974F3DA1B178E85006A31FD /* logout.png */,
 				099E94091B16260A00C7B4A9 /* AppDelegate.swift */,
 				099E94131B16260A00C7B4A9 /* ViewController.swift */,
 				099E940F1B16260A00C7B4A9 /* Info.plist */,
+				0974F3DC1B17CD87006A31FD /* yopubW.png */,
 				099E94101B16260A00C7B4A9 /* LogInViewController.swift */,
 				099E94111B16260A00C7B4A9 /* SignUpViewController.swift */,
 				099E94121B16260A00C7B4A9 /* TableViewCell.swift */,
@@ -250,6 +256,8 @@
 				099E94191B16260A00C7B4A9 /* Info.plist in Resources */,
 				099E93E41B1624E800C7B4A9 /* LaunchScreen.xib in Resources */,
 				099E93FC1B16257200C7B4A9 /* YOpub.xcworkspace in Resources */,
+				0974F3DF1B17CFE5006A31FD /* launch.png in Resources */,
+				0974F3DD1B17CD87006A31FD /* yopubW.png in Resources */,
 				09F5D47A1B166BDA00E68C17 /* Main.storyboard in Resources */,
 				0974F3DB1B178E85006A31FD /* logout.png in Resources */,
 				099E93FA1B16256400C7B4A9 /* Podfile in Resources */,

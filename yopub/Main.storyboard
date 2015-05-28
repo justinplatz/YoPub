@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--YoPub!-->
+        <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="yopub" customModuleProvider="target" sceneMemberID="viewController">
@@ -59,7 +59,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="YoPub!" id="zo9-y5-m2C">
+                    <navigationItem key="navigationItem" id="zo9-y5-m2C">
                         <barButtonItem key="leftBarButtonItem" image="logout.png" id="gED-Lf-Xqz">
                             <color key="tintColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
