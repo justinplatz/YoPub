@@ -8,7 +8,7 @@
 
 import UIKit
 
-var currentUser = PFUser.currentUser()
+var currentUser:PFUser?
 var isUserLoggedIn = false
 
 class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventListener {
@@ -16,9 +16,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
     @IBOutlet weak var usernameTextField: UITextField! = nil
     
     @IBOutlet weak var passwordTextField: UITextField! = nil
-    
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -59,6 +57,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 // Do stuff after successful login.
                 
                 var currentUser = PFUser.currentUser()
+                println(currentUser?.username)
+
                 if currentUser != nil {
                     // Do stuff with the user
                 } else {
@@ -93,8 +93,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                     }
                 }
                 
-                
-                
+                ViewController().setChannel(currentUser!)
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
                 
@@ -107,6 +106,19 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
     }
     
 
+    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+//        // Get the new view controller using segue.destinationViewController.
+//        // Pass the selected object to the new view controller.
+//        
+//        println("Code goes here")
+//        if (segue.identifier == "dismissViewControllerAnimated" ){
+//            println("Then does it go herE?")
+//            let vc = segue.destinationViewController as! ViewController
+//            vc.channelOfSignedIn = "Test"
+//        }
+//    }
+    
     
     func displayAlertMessage(myMessage:String){
         var myAlert = UIAlertController(title: "Alert", message: myMessage, preferredStyle:UIAlertControllerStyle.Alert)

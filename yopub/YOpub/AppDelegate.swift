@@ -97,6 +97,9 @@ import CloudKit
         if((alert) != nil){
 
             var alert = UIAlertView()
+            
+            println("The message is")
+            println(message as String)
             alert.title = message as String
             
             println("Printing the aps ")

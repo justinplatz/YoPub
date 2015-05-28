@@ -7,13 +7,6 @@
 
 
 
-
-
-//typedef void (^PNClientPushNotificationsRemoveHandlingBlock)(PNError *error);
-//typedef void (^PNClientPushNotificationsEnableHandlingBlock)(NSArray *channels, PNError *error);
-//typedef void (^PNClientPushNotificationsDisableHandlingBlock)(NSArray *channels, PNError *error);
-//typedef void (^PNClientPushNotificationsEnabledChannelsHandlingBlock)(NSArray *channels, PNError *error);
-
 import UIKit
 
 
@@ -42,32 +35,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             
             client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in
-                println("the result is ", result)
-                println("the status is ", status)
+
             })
             
-            
-     
-            
-            client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
-                if(!status.error){
+        }
+    }
+    
+
+    func setChannel(current:PFUser){
+        var client : PubNub?
+        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+        client?.addListeners([self])
+        
+        println("Current user is now")
+            println(current.username)
+        
+            let myChannel = current.username
+        
+        
+            println("I am adding the channel with the name ")
+            println(myChannel)
+        
+            println(client)
+        
+    client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion:{ (status) ->Void in
+        println("Entered the push on channel")
+        if(!status.error){
                     println("addpushnotificaitons on channel worked ")
                 }
                 else{
                     println("add push did not work******")
                 }
             })
-            
-            
-            
-
-            
-
-
-            
-        }
+        
+        println("Is this printing?")
     }
-    
     
     
     
@@ -129,9 +131,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
+        
         var name = friendsArray[indexPath.row] as String
-
-        var payload = ["apns":["alert":name, "badge":"1","sound":"default"]]
+        
+        var myName = PFUser.currentUser()?.username
+        println("the current user is ")
+        println(myName)
+        
+        
+        var payload = ["apns":["alert":myName!, "badge":"1","sound":"default"]]
+        
         client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
     }
     
@@ -156,7 +165,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
-        
+        currentUser = PFUser.currentUser()
     }
     
     
@@ -194,7 +203,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
             }
             else{
-                
                 var newRelation = PFObject(className: "Relation")
                 newRelation["Sender"] = currentUser?.username
                 newRelation["Friend"] = inputTextField!.text
@@ -208,7 +216,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
                 self.tableView .reloadData()
-
             }
             
             
@@ -220,7 +227,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // you can use this text field
             inputTextField = textField
         }
-        
         //Present the AlertController
         self.presentViewController(actionSheetController, animated: true, completion: nil)
         

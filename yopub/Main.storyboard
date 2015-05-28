@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--YoPub!-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="yopub" customModuleProvider="target" sceneMemberID="viewController">
@@ -44,11 +44,22 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="YHO-WP-nmm"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPH-pB-eNF">
+                                <rect key="frame" x="10" y="10" width="288" height="51"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="28"/>
+                                <color key="textColor" red="0.51764705879999995" green="0.20392156859999999" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="CPH-pB-eNF"/>
+                            </mask>
+                        </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="zo9-y5-m2C">
+                    <navigationItem key="navigationItem" title="YoPub!" id="zo9-y5-m2C">
                         <barButtonItem key="leftBarButtonItem" image="logout.png" id="gED-Lf-Xqz">
                             <color key="tintColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
