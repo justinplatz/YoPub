@@ -49,32 +49,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
      
             
-//            client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
-//                if(!status.error){
-//                    println("addpushnotificaitons on channel worked ")
-//                }
-//                else{
-//                    println("add push did not work******")
-//                }
-//            })
-            
-            
-            
-            var channelOfSignedIn:String?{
-                didSet {
-                    println("This is happening after channel was set *******************")
-                    client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
-                        if(!status.error){
-                            println("addpushnotificaitons on channel worked ")
-                        }
-                        else{
-                            println("add push did not work******")
-                        }
-                    })
-                    
+            client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
+                if(!status.error){
+                    println("addpushnotificaitons on channel worked ")
                 }
-                
-            }
+                else{
+                    println("add push did not work******")
+                }
+            })
+            
+            
+            
+
             
 
 

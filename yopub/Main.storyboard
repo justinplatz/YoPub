@@ -261,7 +261,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logout.png" width="50" height="50"/>
+        <image name="logout.png" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="fYT-hX-7Z9"/>

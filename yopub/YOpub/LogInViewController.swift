@@ -45,6 +45,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
     }
     
 
+
+    
     @IBAction func loginButtonTapped(sender: AnyObject) {
         
         let usrName = usernameTextField.text
@@ -65,7 +67,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 
                 isUserLoggedIn = true
                 var usrname = currentUser?.username
-                
                 
                 
                 //println("Current user is " + usrname!)
@@ -104,6 +105,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
             }
         }
     }
+    
+
+    
     func displayAlertMessage(myMessage:String){
         var myAlert = UIAlertController(title: "Alert", message: myMessage, preferredStyle:UIAlertControllerStyle.Alert)
         
