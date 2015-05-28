@@ -49,7 +49,7 @@
                         <color key="tintColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="zo9-y5-m2C">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="gED-Lf-Xqz">
+                        <barButtonItem key="leftBarButtonItem" image="logout.png" id="gED-Lf-Xqz">
                             <color key="tintColor" red="0.51764705882352946" green="0.20392156862745098" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="LogOutButtonTapped:" destination="vXZ-lx-hvc" id="79k-Hw-YFE"/>
@@ -260,6 +260,9 @@
             <point key="canvasLocation" x="279" y="-324"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="logout.png" width="50" height="50"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="fYT-hX-7Z9"/>
     </inferredMetricsTieBreakers>

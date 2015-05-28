@@ -23,6 +23,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         usernameTextField.delegate=self
         passwordTextField.delegate=self
         
+        
+//        var myTextField: UITextField = UITextField(frame: CGRect(x: 31, y: 222, width: 259.00, height: 50.00));
+//        myTextField.delegate=self
+//        self.view.addSubview(myTextField)
+//        myTextField.borderStyle = UITextBorderStyle.Line
+
+        
     }
     
     override func didReceiveMemoryWarning() {

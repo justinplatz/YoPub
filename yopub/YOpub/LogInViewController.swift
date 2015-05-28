@@ -9,10 +9,9 @@
 import UIKit
 
 var currentUser = PFUser.currentUser()
-
 var isUserLoggedIn = false
 
-class LogInViewController: UIViewController, UITextFieldDelegate {
+class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventListener {
     
     @IBOutlet weak var usernameTextField: UITextField! = nil
     
@@ -45,6 +44,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+
     @IBAction func loginButtonTapped(sender: AnyObject) {
         
         let usrName = usernameTextField.text
@@ -57,7 +57,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 // Do stuff after successful login.
                 
                 var currentUser = PFUser.currentUser()
-                //println("Current user is " + currentUser!.username!)
                 if currentUser != nil {
                     // Do stuff with the user
                 } else {
@@ -65,9 +64,11 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 }
                 
                 isUserLoggedIn = true
-                
                 var usrname = currentUser?.username
-                println("Current user is " + usrname!)
+                
+                
+                
+                //println("Current user is " + usrname!)
                 var query = PFQuery(className:"Relation")
                 query.whereKey("Sender", equalTo : usrname!)
                 query.findObjectsInBackgroundWithBlock {
@@ -80,14 +81,14 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         if let objects = objects as? [PFObject] {
                             for object in objects {
                                 var friendName = object["Friend"] as! String
-                                println(friendName)
+                                //println(friendName)
                                 friendsArray.append(friendName)
                             }
                         }
                     }
                     else {
                         // Log details of the failure
-                        println("Error: \(error!) \(error!.userInfo!)")
+                        println("There is an error in the query it is Error: \(error!) \(error!.userInfo!)")
                     }
                 }
                 

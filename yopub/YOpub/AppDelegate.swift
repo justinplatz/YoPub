@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CloudKit
+
 
 
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate, PNObjectEventListener {
@@ -16,11 +18,14 @@ import UIKit
     var dToken: NSData? {
         didSet {
             self.baseViewController?.tokenID = dToken
+            println("Token id is getting set to ")
+            println(dToken)
+
         }
     }
     var baseViewController: ViewController?
     var client:PubNub?
-
+    
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -29,41 +34,35 @@ import UIKit
             clientKey: "z1ZI3oDA6SwhnepNWg0CXy6f5ljHdmTQW1kQyd2H")
         
         var navController = window!.rootViewController! as! UINavigationController
-        //println(navController)
-        //println(navController.viewControllers[0])
         self.baseViewController = navController.viewControllers[0] as? ViewController;
         
-        //PubNub.setDelegate(self)
         
         
         
         if (application.respondsToSelector("isRegisteredForRemoteNotifications"))
         {
             // iOS 8 Notifications
-            println("here ")
             application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: (.Badge | .Sound | .Alert), categories: nil));
             application.registerForRemoteNotifications()
         }
         else
         {
             // iOS < 8 Notifications
-            println("or here")
             application.registerForRemoteNotificationTypes(.Badge | .Sound | .Alert)
         }
         
         
         
+
+
         
         
-        client?.self = PubNub.clientWithPublishKey("demo", andSubscribeKey: "demo")
-        //client?.self.addListeners(self)
-  
+        
         return true
     }
     
 
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        println("Didregister gets called")
         let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
         var tokenString = ""
         
@@ -73,42 +72,63 @@ import UIKit
         
         println("My Device Token is: \(tokenString)")
         apnsID = tokenString
+        println("The dtoken is being set to ", deviceToken)
         dToken = deviceToken
     }
     
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        println("The didfailtoregister error is:")
         println(error)
     }
-    
+
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        
+
         var message: NSString = ""
         var alert: AnyObject? = userInfo["aps"]
         if((alert?.isKindOfClass(NSString)) != nil){
-            message = alert as! NSString
+            //message = (alert as! AnyObject? as? String)!
+            message = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String
         }
         else if((alert?.isKindOfClass(NSDictionary)) != nil){
-            message = alert!.objectForKey("alert")! as! NSString
+            message = alert!.objectForKey("alert")! as! NSString as! String
         }
-        
+
         if((alert) != nil){
-            
+
             var alert = UIAlertView()
             alert.title = message as String
-            alert.message = " is the message"
+            
+            println("Printing the aps ")
+            println(userInfo["aps"]!.objectForKey("alert"))
+            println("Printing the name ")
+            println(userInfo["alert"] )
+            
+            alert.message = "YO"
             alert.addButtonWithTitle("OK")
             alert.show()
         }
     }
-//    
-//    func pubnubClient(client: PubNub!, didReceiveMessage message: PNMessage!) {
-//        println("I Got A MEssage ", message)
-//        println("The message is : ",  message.message as! NSString)
-//        
+//
+//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+//
+//            println("A new record is generated and we received a push")
+//
+//            let notification = CKNotification(
+//                fromRemoteNotificationDictionary: userInfo)
+//
+//            if let query = notification as? CKQueryNotification{
+//                let model = query.recordFields["alert"] as? NSString as? String
+//                if let theModel = model{
+//                    println("The model of the newly inserted car is \(theModel)")
+//                }
+//
+//            }
+//
 //    }
-    
-    
+
+
+
     
 
     
@@ -136,6 +156,18 @@ import UIKit
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
+    
+    func client(client: PubNub!, didReceiveMessage message: PNResult!, withStatus status: PNStatus!) {
+        if((status) != nil){
+        
+        }
+        else if((message) != nil){
+            println("I got a message from didreceivemessage! it is: ")
+            println(message.data!)
+
+        }
+        
+    }
     
     
     

@@ -23,11 +23,68 @@ var friendsArray: [String] = []
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNObjectEventListener {
     
     @IBOutlet weak var tableView: UITableView!
+    var client : PubNub?
     
-    var tokenID: NSData?
+    var alertNotification:NSDictionary = [
+        "alert" : [""],
+        "badge" : [1],
+        "sound" : ["default"]
+    ]
+    
+    
+    
+    var tokenID: NSData? {
+        didSet {
+            println("The Token ID has been set*****")
+            
+            
+            client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in
+                println("the result is ", result)
+                println("the status is ", status)
+            })
+            
+            
+     
+            
+//            client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
+//                if(!status.error){
+//                    println("addpushnotificaitons on channel worked ")
+//                }
+//                else{
+//                    println("add push did not work******")
+//                }
+//            })
+            
+            
+            
+            var channelOfSignedIn:String?{
+                didSet {
+                    println("This is happening after channel was set *******************")
+                    client?.addPushNotificationsOnChannels(["channelOfSignedIn"], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
+                        if(!status.error){
+                            println("addpushnotificaitons on channel worked ")
+                        }
+                        else{
+                            println("add push did not work******")
+                        }
+                    })
+                    
+                }
+                
+            }
+            
+
+
+            
+        }
+    }
+    
+    
+    
+    
     var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
     
     
@@ -40,48 +97,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         )
     }
 
-//    
-//    private var channel = PNChannel()
-//    private let config = PNConfiguration(publishKey: "demo", subscribeKey: "demo", secretKey: nil)
-    
-
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        
-//        PubNub.setConfiguration(self.config)
-//        PubNub.connect()
-//        self.channel = PNChannel.channelWithName("hi_world", shouldObservePresence: false) as! PNChannel
-//        PubNub.subscribeOn([self.channel])
-//        
-        var tokenID: NSData? {
-            didSet {
-                println("In here")
-//                //Add a channel to APNS
-//                PubNub.enablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
-//                
-//                // Remove that channel from APNS
-//                //PubNub.disablePushNotificationsOnChannel(self.channel, withDevicePushToken: tokenID)
-//                
-//                //this will request all channels associated with this push token
-//                PubNub.requestPushNotificationEnabledChannelsForDevicePushToken(tokenID,
-//                    withCompletionHandlingBlock: { (var enabledChannels: [AnyObject]!, var error: PNError!) -> Void in
-//                        println(enabledChannels)
-//                        println(error)
-//                })
-//                
-//                // This will dissassociate all channels with this push token in a single method call
-//                //            PubNub.removeAllPushNotificationsForDevicePushToken(tokenID,
-//                //                withCompletionHandlingBlock: {
-//                //                    (var error: PNError!) -> Void in
-//                //                    println(error)
-//                //            })
-//                
-            }
-        }
+      
         
+        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+        client?.addListeners([self])
+
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         
         
@@ -119,15 +143,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        //println((cell as! TableViewCell).usernameLabel.text)
-        
-//        var instanceOfCustomObject: CustomObject = CustomObject()
-//        instanceOfCustomObject.someProperty = "Hello World"
-//        println(instanceOfCustomObject.someProperty)
-//        instanceOfCustomObject.someMethod()
-        
-  
-        
+        var name = friendsArray[indexPath.row] as String
+
+        var payload = ["apns":["alert":name, "badge":"1","sound":"default"]]
+        client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
     }
     
     
@@ -151,17 +170,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
-        //        println("Here")
-        //
-        //        isUserLoggedIn = false
-        //        friendsArray = []
-        //
-        //        PFUser.logOut()
-        //
-        //        var currentUser = PFUser.currentUser() // this will now be nil
-        //
-        //        println("Current user after logout is " + currentUser!.username!)
-        
         
     }
     
