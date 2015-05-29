@@ -18,7 +18,6 @@ import CloudKit
     var dToken: NSData? {
         didSet {
             self.baseViewController?.tokenID = dToken
-            println("Token id is getting set to ")
             println(dToken)
 
         }
@@ -29,15 +28,12 @@ import CloudKit
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        
         Parse.setApplicationId("GD3ntgZ5gyAKlWugeLZJzwbrgkyTwOZ9sEesVqOv",
             clientKey: "z1ZI3oDA6SwhnepNWg0CXy6f5ljHdmTQW1kQyd2H")
         
         var navController = window!.rootViewController! as! UINavigationController
-        self.baseViewController = navController.viewControllers[0] as? ViewController;
         
-        
-        
+        self.baseViewController = navController.viewControllers[0] as? ViewController
         
         if (application.respondsToSelector("isRegisteredForRemoteNotifications"))
         {
@@ -63,9 +59,7 @@ import CloudKit
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
         }
         
-        println("My Device Token is: \(tokenString)")
         apnsID = tokenString
-        println("The dtoken is being set to ", deviceToken)
         dToken = deviceToken
     }
     
@@ -80,7 +74,6 @@ import CloudKit
         var message: NSString = ""
         var alert: AnyObject? = userInfo["aps"]
         if((alert?.isKindOfClass(NSString)) != nil){
-            //message = (alert as! AnyObject? as? String)!
             message = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String
         }
         else if((alert?.isKindOfClass(NSDictionary)) != nil){
@@ -118,21 +111,6 @@ import CloudKit
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    
-//    func client(client: PubNub!, didReceiveMessage message: PNResult!, withStatus status: PNStatus!) {
-//        if((status) != nil){
-//        
-//        }
-//        else if((message) != nil){
-//            println("I got a message from didreceivemessage! it is: ")
-//            println(message.data!)
-//
-//        }
-//        
-//    }
-    
-    
     
 }
 
