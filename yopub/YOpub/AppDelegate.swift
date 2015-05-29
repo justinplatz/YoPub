@@ -51,13 +51,6 @@ import CloudKit
             application.registerForRemoteNotificationTypes(.Badge | .Sound | .Alert)
         }
         
-        
-        
-
-
-        
-        
-        
         return true
     }
     
@@ -97,46 +90,13 @@ import CloudKit
         if((alert) != nil){
 
             var alert = UIAlertView()
-            
-            println("The message is")
-            println(message as String)
             alert.title = message as String
-            
-            println("Printing the aps ")
-            println(userInfo["aps"]!.objectForKey("alert"))
-            println("Printing the name ")
-            println(userInfo["alert"] )
-            
             alert.message = "YO"
             alert.addButtonWithTitle("OK")
             alert.show()
         }
     }
-//
-//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-//
-//            println("A new record is generated and we received a push")
-//
-//            let notification = CKNotification(
-//                fromRemoteNotificationDictionary: userInfo)
-//
-//            if let query = notification as? CKQueryNotification{
-//                let model = query.recordFields["alert"] as? NSString as? String
-//                if let theModel = model{
-//                    println("The model of the newly inserted car is \(theModel)")
-//                }
-//
-//            }
-//
-//    }
 
-
-
-    
-
-    
-    
-    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -160,17 +120,17 @@ import CloudKit
     }
     
     
-    func client(client: PubNub!, didReceiveMessage message: PNResult!, withStatus status: PNStatus!) {
-        if((status) != nil){
-        
-        }
-        else if((message) != nil){
-            println("I got a message from didreceivemessage! it is: ")
-            println(message.data!)
-
-        }
-        
-    }
+//    func client(client: PubNub!, didReceiveMessage message: PNResult!, withStatus status: PNStatus!) {
+//        if((status) != nil){
+//        
+//        }
+//        else if((message) != nil){
+//            println("I got a message from didreceivemessage! it is: ")
+//            println(message.data!)
+//
+//        }
+//        
+//    }
     
     
     

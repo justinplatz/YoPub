@@ -9,66 +9,36 @@
 
 import UIKit
 
-
-
 var friendsArray: [String] = []
-
-
-
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNObjectEventListener {
     
     @IBOutlet weak var tableView: UITableView!
+    
     var client : PubNub?
-    
-    var alertNotification:NSDictionary = [
-        "alert" : [""],
-        "badge" : [1],
-        "sound" : ["default"]
-    ]
-    
-    
     
     var tokenID: NSData? {
         didSet {
             println("The Token ID has been set*****")
-            
-            
-            client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in
-                
-            })
-            
+            client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in} )
         }
     }
     
 
     func setChannel(current:PFUser){
-        var client : PubNub?
-        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
-        client?.addListeners([self])
         
         println("Current user is now")
-            println(current.username)
+        println(current.username)
         
-            let myChannel = current.username
+        let myChannel = current.username
         
         
-            println("I am adding the channel with the name ")
-            println(myChannel)
+        println("I am adding the channel with the name ")
+        println(myChannel)
+        println(client)
         
-            println(client)
+        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: nil)
         
-    client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion:{ (status) ->Void in
-        println("Entered the push on channel")
-        if(!status.error){
-                    println("addpushnotificaitons on channel worked ")
-                }
-                else{
-                    println("add push did not work******")
-                }
-            })
-        
-        println("Is this printing?")
     }
     
     
@@ -136,16 +106,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         
-        var name = friendsArray[indexPath.row] as String
+        println("Sending to channel with the name of")
+        println(friendsArray[indexPath.row] as String)
         
         var myName = PFUser.currentUser()?.username?.uppercaseString
-        println("the current user is ")
-        println(myName)
-        
-        
+
         var payload = ["apns":["alert":myName!, "badge":"1","sound":"default"]]
         
         client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
+        
+        var sentAlert = UIAlertView()
+        sentAlert.title = "YoPub! Sent To"
+        sentAlert.message = (friendsArray[indexPath.row] as String).uppercaseString
+        sentAlert.addButtonWithTitle("OK")
+        sentAlert.show()
+        
     }
     
     
@@ -157,15 +132,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     override func viewDidAppear(animated: Bool) {
-        
         if(!isUserLoggedIn){
             self.performSegueWithIdentifier("loginViewSegue", sender: self)
         }
         else{
             self.tableView .reloadData()
         }
-        
-        
     }
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
@@ -252,12 +224,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
 
     }
-    
-    
-    
-    
-    
-    
     
     
 }
