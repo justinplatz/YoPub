@@ -3,7 +3,7 @@
 //
 
 #import <Parse/Parse.h>
-#import "PubNub.h"
+#import <PubNub/PubNub.h>
 
 
 

@@ -46,7 +46,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PubNub:
-    :commit: 85e9a422341c564bfdffa21316297c0c6c5edfd2
+    :commit: 8ca58014d8adaece2ee8996175a5c79d05efcddc
     :git: https://github.com/pubnub/objective-c.git
 
 SPEC CHECKSUMS:

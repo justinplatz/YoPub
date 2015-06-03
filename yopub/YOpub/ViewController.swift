@@ -41,10 +41,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
 
 //        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
-        let pnc:PNConfiguration = PNConfiguration()
-        pnc.publishKey = "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96"
-        pnc.subscribeKey = "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f"
-        client = PubNub.clientWithConfiguration(pnc)
+        let config = PNConfiguration(publishKey: "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", subscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+        client = PubNub.clientWithConfiguration(config)
         client?.addListeners([self])
         
         var image = UIImage(named: "yopubW.png")
