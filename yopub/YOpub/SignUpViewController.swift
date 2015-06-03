@@ -59,7 +59,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             if error == nil {
                 
                 dispatch_async(dispatch_get_main_queue()) {
-                    //self.performSegueWithIdentifier("loginViewSegue", sender: self)
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }
                 

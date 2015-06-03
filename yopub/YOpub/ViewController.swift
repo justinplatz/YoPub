@@ -5,8 +5,6 @@
 //  Created by Justin Platz on 5/20/15.
 //  Copyright (c) 2015 ioJP. All rights reserved.
 
-
-
 import UIKit
 
 var friendsArray: [String] = []
@@ -20,7 +18,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in} )
         }
     }
-    
 
     func setChannel(current:PFUser){
         println(current.username)
@@ -28,9 +25,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: nil)
         
     }
-    
-    
-    
+
     var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
     
     func UIColorFromRGB(rgbValue: UInt) -> UIColor {
@@ -42,12 +37,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         )
     }
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+//        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+        let pnc:PNConfiguration = PNConfiguration()
+        pnc.publishKey = "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96"
+        pnc.subscribeKey = "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f"
+        client = PubNub.clientWithConfiguration(pnc)
         client?.addListeners([self])
         
         var image = UIImage(named: "yopubW.png")
@@ -60,14 +57,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         var navColor = UIColorFromRGB(0x3598DB)
         navigationController?.navigationBar.barTintColor = navColor
 
-        
     }
-    
-    
-    
-    
-    
-    
+
     override func viewWillAppear(animated: Bool) {
         self.tableView .reloadData()
     }
@@ -103,14 +94,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         sentAlert.show()
         
     }
-    
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    
-    
+
     override func viewDidAppear(animated: Bool) {
         if(!isUserLoggedIn){
             self.performSegueWithIdentifier("loginViewSegue", sender: self)
@@ -125,8 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let myChannel = currentUser!.username
 
         currentUser = PFUser.currentUser()
-        
-        
+
 //        client?.removePushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion:{ (status) ->Void in
 //            if(!status.error){
 //                println("remove from channel worked ")
@@ -137,11 +124,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        })
         
     }
-    
-    
-    
-    
-    
     
     
     @IBAction func AddButtonTapped(sender: AnyObject) {
@@ -168,7 +150,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 alert.title = "Username Does Not Exist"
                 alert.addButtonWithTitle("Done")
                 alert.show()
-                
             }
             else{
                 var newRelation = PFObject(className: "Relation")
@@ -185,7 +166,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
-
         }
         actionSheetController.addAction(nextAction)
         //Add a text field
@@ -195,9 +175,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         //Present the AlertController
         self.presentViewController(actionSheetController, animated: true, completion: nil)
-
-
-
     }
     
     

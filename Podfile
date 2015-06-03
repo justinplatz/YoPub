@@ -5,9 +5,9 @@ target 'yopub' do
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod 'AFNetworking', '~> 2.5'
-pod 'CocoaLumberjack'
-pod 'PubNub', :path => '/Users/nyjetsjustin/Documents/objective-c'
+#pod 'AFNetworking', '~> 2.5'
+#pod 'CocoaLumberjack'
+pod 'PubNub', :git => 'https://github.com/pubnub/objective-c.git', :branch => '4.0b2'
 pod 'Parse', '~> 1.7'
 
 

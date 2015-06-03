@@ -62,8 +62,7 @@ import CloudKit
         apnsID = tokenString
         dToken = deviceToken
     }
-    
-    
+
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println("The didfailtoregister error is:")
         println(error)
@@ -71,6 +70,8 @@ import CloudKit
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
 
+        
+        println("Getting notification")
         var message: NSString = ""
         var alert: AnyObject? = userInfo["aps"]
         if((alert?.isKindOfClass(NSString)) != nil){
@@ -81,7 +82,6 @@ import CloudKit
         }
 
         if((alert) != nil){
-
             var alert = UIAlertView()
             alert.title = message as String
             alert.message = "YO"
