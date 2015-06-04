@@ -12,19 +12,25 @@ var friendsArray: [String] = []
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNObjectEventListener {
     
     @IBOutlet weak var tableView: UITableView!
-    var client : PubNub?
+    //var client : PubNub?
     var tokenID: NSData? {
         didSet {
-            client?.pushNotificationEnabledChannelsForDeviceWithPushToken(tokenID, andCompletion: { (result, status) -> Void in} )
+            println("**************************")
+            println("tokenID: \(tokenID)")
+            println("**************************")
         }
     }
 
-    func setChannel(current:PFUser){
-        println(current.username)
-        let myChannel = current.username
-        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: nil)
-        
-    }
+//    func setChannel(current:PFUser){
+//        println(current.username)
+//        let myChannel = current.username
+////        client?.removeAllPushNotificationsFromDeviceWithPushToken(tokenID, andCompletion: nil)
+////        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: nil)
+//        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
+//            println(status)
+//        })
+//        
+//    }
 
     var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
     
@@ -39,11 +45,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
 //        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
         let config = PNConfiguration(publishKey: "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", subscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
-        client = PubNub.clientWithConfiguration(config)
-        client?.addListeners([self])
+        appDel.client = PubNub.clientWithConfiguration(config)
+        appDel.client?.addListeners([self])
         
         var image = UIImage(named: "yopubW.png")
         self.navigationItem.titleView = UIImageView(image: image)
@@ -83,7 +89,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         var payload = ["apns":["alert":myName!, "badge":"1","sound":"default"]]
         
-        client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
+        let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
+        appDel.client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
         
         var sentAlert = UIAlertView()
         sentAlert.title = "YoPub! Sent To"
@@ -103,8 +110,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else{
             self.tableView .reloadData()
+            
         }
     }
+    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if(segue.identifier == "loginViewSegue"){
+//            let destinationViewController = segue.destinationViewController as? LogInViewController
+//            destinationViewController!.tokenID = tokenID
+//            
+//        }
+//    }
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
         

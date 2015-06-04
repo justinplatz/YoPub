@@ -13,6 +13,8 @@ var isUserLoggedIn = false
 
 class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventListener {
     
+    var tokenID:NSData?
+    
     @IBOutlet weak var usernameTextField: UITextField! = nil
     
     @IBOutlet weak var passwordTextField: UITextField! = nil
@@ -20,7 +22,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+
         passwordTextField.delegate=self
         usernameTextField.delegate=self
         
@@ -66,7 +68,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 }
                 
                 isUserLoggedIn = true
-                var usrname = currentUser?.username
+                var usrname: String? = currentUser?.username
                 
                 
                 //println("Current user is " + usrname!)
@@ -91,7 +93,17 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                     }
                 }
                 
-                ViewController().setChannel(currentUser!)
+//                ViewController().setChannel(currentUser!)
+                
+                let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
+                
+                let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
+                appDel.client!.addPushNotificationsOnChannels(["test"]!, withDevicePushToken: deviceToken, andCompletion: nil)
+
+//                appDel.client?.addPushNotificationsOnChannels(["test"]!, withDevicePushToken: deviceToken, andCompletion: nil)
+//                appDel.client?.addPushNotificationsOnChannels(["test"], withDevicePushToken: deviceToken, andCompletion: { (status) -> Void in
+//                })
+
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
                 
@@ -128,7 +140,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
         self.presentViewController(myAlert, animated: true, completion: nil)
     }
     
-    func textFieldShouldReturn(textField: UITextField!) -> Bool // called when 'return' key pressed. return NO to ignore.
+    func textFieldShouldReturn(textField: UITextField) -> Bool // called when 'return' key pressed. return NO to ignore.
     {
         textField.resignFirstResponder()
         return true;

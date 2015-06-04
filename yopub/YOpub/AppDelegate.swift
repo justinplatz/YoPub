@@ -61,6 +61,7 @@ import CloudKit
         
         apnsID = tokenString
         dToken = deviceToken
+        NSUserDefaults.standardUserDefaults().setObject(deviceToken, forKey: "deviceToken")
     }
 
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
