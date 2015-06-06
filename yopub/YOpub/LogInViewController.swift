@@ -28,9 +28,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
         
         isUserLoggedIn = false
         friendsArray = []
-        
-        
-        
+
     }
     
     
@@ -43,10 +41,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-
-    
     @IBAction func loginButtonTapped(sender: AnyObject) {
         
         let usrName = usernameTextField.text
@@ -68,10 +63,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 }
                 
                 isUserLoggedIn = true
-                var usrname: String? = currentUser?.username
+                var usrname: String! = currentUser!.username as String!
                 
-                
-                //println("Current user is " + usrname!)
+                println("Current user is " + usrname!)
                 var query = PFQuery(className:"Relation")
                 query.whereKey("Sender", equalTo : usrname!)
                 query.findObjectsInBackgroundWithBlock {
@@ -84,6 +78,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                                 var friendName = object["Friend"] as! String
                                 //println(friendName)
                                 friendsArray.append(friendName)
+                                
+                                //let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
+                                //appDel.client?.publish("Online", toChannel: friendName, withCompletion: nil)
+
                             }
                         }
                     }
@@ -93,19 +91,20 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                     }
                 }
                 
-//                ViewController().setChannel(currentUser!)
-                
-                let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
-                
-                let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
-                appDel.client!.addPushNotificationsOnChannels(["test"]!, withDevicePushToken: deviceToken, andCompletion: nil)
+                let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
 
-//                appDel.client?.addPushNotificationsOnChannels(["test"]!, withDevicePushToken: deviceToken, andCompletion: nil)
-//                appDel.client?.addPushNotificationsOnChannels(["test"], withDevicePushToken: deviceToken, andCompletion: { (status) -> Void in
-//                })
+                let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
+
+                ///// 
+                // First lets remove all channels
+                appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(deviceToken as! NSData, andCompletion: nil)
+                //
+                // Now lets add just the one that we want
+                 appDel.client?.addPushNotificationsOnChannels([currentUser!.username as String!], withDevicePushToken: deviceToken as! NSData,andCompletion: nil)
+                /////
+
 
                 self.dismissViewControllerAnimated(true, completion: nil)
-                
                 
                 
             } else {
@@ -114,21 +113,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
             }
         }
     }
-    
-
-    
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-//        // Get the new view controller using segue.destinationViewController.
-//        // Pass the selected object to the new view controller.
-//        
-//        println("Code goes here")
-//        if (segue.identifier == "dismissViewControllerAnimated" ){
-//            println("Then does it go herE?")
-//            let vc = segue.destinationViewController as! ViewController
-//            vc.channelOfSignedIn = "Test"
-//        }
-//    }
-    
     
     func displayAlertMessage(myMessage:String){
         var myAlert = UIAlertController(title: "Alert", message: myMessage, preferredStyle:UIAlertControllerStyle.Alert)

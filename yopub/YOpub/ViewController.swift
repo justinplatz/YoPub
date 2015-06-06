@@ -12,7 +12,7 @@ var friendsArray: [String] = []
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNObjectEventListener {
     
     @IBOutlet weak var tableView: UITableView!
-    //var client : PubNub?
+
     var tokenID: NSData? {
         didSet {
             println("**************************")
@@ -21,16 +21,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
-//    func setChannel(current:PFUser){
-//        println(current.username)
-//        let myChannel = current.username
-////        client?.removeAllPushNotificationsFromDeviceWithPushToken(tokenID, andCompletion: nil)
-////        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: nil)
-//        client?.addPushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion: { (status) -> Void in
-//            println(status)
-//        })
-//        
-//    }
 
     var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
     
@@ -45,10 +35,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
-//        client = PubNub.clientWithPublishKey("pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", andSubscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
-        let config = PNConfiguration(publishKey: "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96", subscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+        
+        let config = PNConfiguration(
+            publishKey: "pub-c-f83b8b34-5dbc-4502-ac34-5073f2382d96",
+            subscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
+      
         appDel.client = PubNub.clientWithConfiguration(config)
+        
         appDel.client?.addListeners([self])
         
         var image = UIImage(named: "yopubW.png")
@@ -83,14 +78,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         
         var myName = PFUser.currentUser()?.username?.uppercaseString
 
-        var payload = ["apns":["alert":myName!, "badge":"1","sound":"default"]]
+        var payload =
+        ["apns":
+                ["alert":myName!,
+                "badge":"1",
+                "sound":"default"]
+        ]
+        
+        println(friendsArray[indexPath.row] as String)
+        println(payload)
         
         let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
-        appDel.client?.publish("test", toChannel: friendsArray[indexPath.row] as String, mobilePushPayload: payload, withCompletion: nil)
+        
+        appDel.client?.publish(
+            "test",
+            toChannel: friendsArray[indexPath.row] as String,
+            mobilePushPayload: payload,
+            withCompletion: nil)
         
         var sentAlert = UIAlertView()
         sentAlert.title = "YoPub! Sent To"
@@ -114,28 +123,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if(segue.identifier == "loginViewSegue"){
-//            let destinationViewController = segue.destinationViewController as? LogInViewController
-//            destinationViewController!.tokenID = tokenID
-//            
-//        }
-//    }
+
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
         
         let myChannel = currentUser!.username
 
         currentUser = PFUser.currentUser()
-
-//        client?.removePushNotificationsOnChannels([myChannel!], withDevicePushToken: tokenID, andCompletion:{ (status) ->Void in
-//            if(!status.error){
-//                println("remove from channel worked ")
-//            }
-//            else{
-//                println("remove push  channel did not work******")
-//            }
-//        })
+       
+        let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
+        
+        appDel.client?.removeListeners([self])
+        appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(tokenID, andCompletion: nil)
+        
+        let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
+        appDel.client?.removePushNotificationsFromChannels(nil, withDevicePushToken: deviceToken as! NSData, andCompletion: nil)
+        //appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(deviceToken, andCompletion: nil)
         
     }
     

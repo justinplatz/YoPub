@@ -9,8 +9,6 @@
 import UIKit
 import CloudKit
 
-
-
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate, PNObjectEventListener {
     
     var window: UIWindow?
@@ -24,8 +22,7 @@ import CloudKit
     }
     var baseViewController: ViewController?
     var client:PubNub?
-    
-    
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         Parse.setApplicationId("GD3ntgZ5gyAKlWugeLZJzwbrgkyTwOZ9sEesVqOv",
@@ -71,24 +68,31 @@ import CloudKit
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
 
-        
         println("Getting notification")
+        
         var message: NSString = ""
         var alert: AnyObject? = userInfo["aps"]
-        if((alert?.isKindOfClass(NSString)) != nil){
-            message = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String
-        }
-        else if((alert?.isKindOfClass(NSDictionary)) != nil){
-            message = alert!.objectForKey("alert")! as! NSString as! String
-        }
+        
+        println(userInfo["aps"])
+        
+//        if((alert?.isKindOfClass(NSString)) != nil){
+                //if its a string then its not a push notification?
+//        }
+        //else if((alert?.isKindOfClass(NSDictionary)) != nil){
+                //if its a dictionary then it is a push notification
+        //}
+
 
         if((alert) != nil){
             var alert = UIAlertView()
-            alert.title = message as String
+            alert.title = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String
             alert.message = "YO"
             alert.addButtonWithTitle("OK")
             alert.show()
         }
+        
+        
+        
     }
 
     func applicationWillResignActive(application: UIApplication) {
