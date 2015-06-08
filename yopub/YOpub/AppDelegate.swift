@@ -68,7 +68,7 @@ import CloudKit
         if((alert) != nil){
             var alert = UIAlertView()
             alert.title = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String
-            alert.message = "YO"
+            alert.message = "YoPub!"
             alert.addButtonWithTitle("OK")
             alert.show()
         }

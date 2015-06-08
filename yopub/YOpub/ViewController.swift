@@ -37,9 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             subscribeKey: "sub-c-34be47b2-f776-11e4-b559-0619f8945a4f")
       
         appDel.client = PubNub.clientWithConfiguration(config)
-        
-        appDel.client?.addListeners([self])
-        
+                
         var image = UIImage(named: "yopubW.png")
         self.navigationItem.titleView = UIImageView(image: image)
         
