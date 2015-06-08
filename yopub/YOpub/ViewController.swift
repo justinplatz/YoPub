@@ -9,17 +9,11 @@ import UIKit
 
 var friendsArray: [String] = []
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PNObjectEventListener {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
-    var tokenID: NSData? {
-        didSet {
-            println("**************************")
-            println("tokenID: \(tokenID)")
-            println("**************************")
-        }
-    }
+    var tokenID: NSData?
 
 
     var colorsArray: [UInt] = [0xE84C3d, 0x1BBC9B, 0x2DCC70, 0x3598DB, 0x34495E, 0x16A086, 0xF1C40F, 0x297FB8, 0x8D44AD]
@@ -59,7 +53,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     override func viewWillAppear(animated: Bool) {
-        self.tableView .reloadData()
+        self.tableView.reloadData()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,7 +113,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else{
             self.tableView .reloadData()
-            
         }
     }
     
@@ -127,8 +120,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBAction func LogOutButtonTapped(sender: AnyObject) {
         
-        let myChannel = currentUser!.username
-
         currentUser = PFUser.currentUser()
        
         let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
@@ -138,8 +129,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
         appDel.client?.removePushNotificationsFromChannels(nil, withDevicePushToken: deviceToken as! NSData, andCompletion: nil)
-        //appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(deviceToken, andCompletion: nil)
-        
     }
     
     
@@ -193,7 +182,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //Present the AlertController
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
-    
     
 }
 

@@ -9,28 +9,18 @@
 import UIKit
 import CloudKit
 
-@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate, PNObjectEventListener {
+@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     
     var window: UIWindow?
     var apnsID: NSString?
-    var dToken: NSData? {
-        didSet {
-            self.baseViewController?.tokenID = dToken
-            println(dToken)
-
-        }
-    }
-    var baseViewController: ViewController?
+    var dToken: NSData?
+    
     var client:PubNub?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         Parse.setApplicationId("GD3ntgZ5gyAKlWugeLZJzwbrgkyTwOZ9sEesVqOv",
             clientKey: "z1ZI3oDA6SwhnepNWg0CXy6f5ljHdmTQW1kQyd2H")
-        
-        var navController = window!.rootViewController! as! UINavigationController
-        
-        self.baseViewController = navController.viewControllers[0] as? ViewController
         
         if (application.respondsToSelector("isRegisteredForRemoteNotifications"))
         {
@@ -74,14 +64,6 @@ import CloudKit
         var alert: AnyObject? = userInfo["aps"]
         
         println(userInfo["aps"])
-        
-//        if((alert?.isKindOfClass(NSString)) != nil){
-                //if its a string then its not a push notification?
-//        }
-        //else if((alert?.isKindOfClass(NSDictionary)) != nil){
-                //if its a dictionary then it is a push notification
-        //}
-
 
         if((alert) != nil){
             var alert = UIAlertView()

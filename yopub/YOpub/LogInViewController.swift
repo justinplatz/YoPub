@@ -95,14 +95,17 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
 
                 let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
 
+                appDel.client?.addListeners([self])
+                
                 ///// 
                 // First lets remove all channels
                 appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(deviceToken as! NSData, andCompletion: nil)
-                //
+            
+                //////
                 // Now lets add just the one that we want
-                 appDel.client?.addPushNotificationsOnChannels([currentUser!.username as String!], withDevicePushToken: deviceToken as! NSData,andCompletion: nil)
-                /////
-
+                appDel.client?.addPushNotificationsOnChannels([currentUser!.username as String!], withDevicePushToken: deviceToken as! NSData,andCompletion: nil)
+                
+                
 
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
