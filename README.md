@@ -1,196 +1,430 @@
-# Build A DIY Amazon Dash Button With PubNub & Arduino
+![image](/Users/nyjetsjustin/Downloads/bannerBlog.png)
 
-"...the IoT enables a myriad of applications ranging from the micro to the macro, and from the trivial to the critical" - Brendan O'Brien
-
-The IoT has birthed many great modern innovations ranging from Nest thermostats to Hue lights. The driving factor of IoT innovation is that "smarter" things give us the ability to utilize information in more meaningful and appropriate ways. Perhaps creating a "smarter" and safer planet, and improving humankind simultaneously.
-
-And then Amazon introduced the Dash Button, which serves just a single purpose: to automate your internet shopping with just the push of a button. The intention is that Amazon wants to automate your shopping using the “Internet of Things” and the Dash Button is just a first step. To some button seems laughable. Really, how many consumers who shop with Amazon are so consumed by Kraft Macaroni and Cheese mmmmmm the cheesiest that they want a button in their house announcing their marriage to a specific product?
-
-Perhaps the biggest flaw of the Dash Button, is that each button has one pre-programmed item that it can order i.e. your Gatorade button can only order Gatorade. 
-
-In this tutorial I will show you how you can make a ***Flash Button*** which is fully customizable, and dare I say superior to its Amazon-produced counterpart, by utilizing the PubNub Arduino & JavaScript SDKs. 
+# (1/2) Using PubNub for Simplified Swift Push Notifications
 
 
-<iframe src="https://vine.co/v/eMmr577XuEg/embed/simple?audio=1" width="600" height="600" frameborder="0"></iframe><script src="https://platform.vine.co/static/scripts/embed.js"></script>
+It is difficult to overemphasize the power of mobile push notifications in your app. There is virtually no other tool that allows you to tap almost two billion people on the shoulder.
 
-## Overview
-To make the Flash Button we will be using:
+Push notifications aren’t a new invention, but as mobile handset growth continues to accelerate along with increasing  IoT connected devices, push alerts only become more important as a method for applications to pass on pressing information and re-engage their users. 
 
-* **Arduino Yun** as the brains for our button
-* **PubNub** to allow us to easily communicate with our webpage and help us to confirm our purchases
-* **Zinc API** to handle the automated purchasing from Amazon
+Push notifications can be an ingenious way to prompt a mobile user at the right place, at the right time, regarding the right piece of information. 
 
-![image](/Users/nyjetsjustin/Documents/PubNub/proccess.png)
+If you observed the impressive splash made by the mobile messaging app Yo, then you may have seen how impactful a simple push notification can be.
 
-You push the button connected to your Arduino -> Arduino Publishes to PubNub -> Your computer Subscribes to PubNub and receives message -> You confirm purchase, Order script uses Zinc and order is placed with Amazon -> Amazon sends you stuff -> You do things, and need more stuff -> You push the button -> etc -> etc 
+In this tutorial I will show you how you can use PubNub & Swift to easily implement push notifications across many different channels by creating a Yo-esque app.
 
-I will show you step-by-step how to use PubNub & Arduino to order from Amazon, however you can customize your button to do **just about anything**.
 
-###Programming Your Arduino
+##Overview
 
-My current setup consists of:
+My app, dubbed YoPub!, consisted of a few technologies:
 
-* 1 Arduino Yun
-* 1 Giant Red Push Button (other variations will suffice)
-* 1 LED light (not necessary)
-* 1 10K resistor (not necessary)
-* 6 male to male cables
+* ***Swift*** as our development language of choice
+* ***CocoaPods*** for our import library management
+* ***Parse*** to handle the User Management 
+* ***PubNub*** to simplify handling Push Notifications 
 
-So if you want to follow my lead exactly go ahead and grab these pieces now. I use an LED light simply for show, it serves no true purpose in the ordering process. Additionally, there is more than one way to skin a cat, so please feel free improvise and improve my project however you choose.
 
-Firstly, lets plug everything in like so:
- 
- * LED attached from pin 13 to ground
- * Push Button attached to pin 2 from +5V
- * 10K resistor attached to pin 2 from ground
+If you are familiar with using these technologies already, then you should skip to <***Part Two***> where I will focus on how to use ***PubNub*** & Swift to send Push Notifications.
 
-The Push Button I use has only two legs. The ones with four legs will of course serve the same purpose but may need to be placed on the breadboard somewhat differently. Also, I only use the LED because I like the visual confirmation of my button being pushed. The LED serves no other real purpose in this project.
+If any of this is unfamiliar to you, do not fret we will cover how to build this app line by line. Also, should you want to peek at how my code was done, the github repo for this project can be found at: <https://www.google.com>
 
-![image](/Users/nyjetsjustin/Documents/PubNub/breadboard.jpg)
+#### Creating A New Project
 
-Ok, so now that we are all connected lets go ahead and open a new Sketch.
+First, open Xcode and Go To: File -> New
+Select a **Single View Application** and press **Next**.
 
-Above our setup lets add some includes and constants like so:
+Enter YoPub! for the **Product Name**, set the **Language** to **Swift**, and **Devices** to **iPhone**. Make sure Use **Core Data** is **unchecked**, and click **Next**.<br><br>
+Choose a directory to save your project, and click **Create**.
+
+
+#### Installing CocoaPods
+
+If you have never installed a Pod before, a really good tutorial on how to get started can be found the CocoaPods official website at:
+
+<https://guides.cocoapods.org/using/using-cocoapods.html>
+
+Once you have **CocoaPods** installed go ahead and open the **PodFile** for YoPub and set it up to look just like this:
+
+	# Uncomment this line to define a global platform for your project
+	# platform :ios, '8.0'
+
+	target 'yopub' do
+
+	source 'https://github.com/CocoaPods/Specs.git'
+
+	pod 'PubNub', :git => 'https://github.com/pubnub/objective-c.git', :branch => '4.0b2'
+	pod 'Parse', '~> 1.7'
+
+
+	end
+
+	target 'yopubTests' do
+
+
+
+	end
+
+
+
+Make sure you grab the most recent pod versions in your project. Also, it is important that after installing our pods here on out we operate entirely in the Workspace part of our project. 
+
+### Adding a Bridging-Header
+
+The next thing we need to do to connect our Swift app to our pods is create an **Objective-C bridging header**. To do this you need to create a new File (File -> New -> File) of type Objective-C File. Call this whatever you like because we will end up deleting this file. Here I have just called it testHeader. When you see "Would you like to configure an Objective-C bridging header?" select Yes. This is the file we really care about.
+
+Now it will add some new files to your project. Click on the File: YoPub!-Bridging-Header.h. Underneath the commented code we need to add an #import so that our project knows to use the Parse  and also the PubNub iOS SDK. To do this we simply add the following lines into this file: 
+										
+			#import <Parse/Parse.h>
+			#import <PubNub/PubNub.h>
 	
-	#include <Bridge.h>
-	#include <HttpClient.h>
+That is it. Now your Xcode project is set up with CocoaPods, and your Bridging-Header is ready to go. 
 
+### User Login and Sign Up Views
+First we are going to design the basic UI of the Login and Sign Up view. We will want to be able to determine that when we reach our home screen it is because we are in fact signed in, so we add a UILabel anywhere to the view and write "We are signed in". This page will later become our home screen of the app.
 
-	// constants won't change. They're used here to
-	// set pin numbers:
-	const int buttonPin = 2;     // the number of the pushbutton pin
-	const int ledPin =  13;      // the number of the LED pin
+Next we will create the Login and Sign Up views. We begin by dragging a new View Controller onto the storyboard. On this new View Controller, we drag three UI Labels and title them "Login View","Username","Password". We add UITextfields beneath the "Username" and "Password" labels so users can enter their information.  Then, we drag a UIButton onto the view and label it Login. Your Storyboard should now look similar to this:
 
-	// variables will change:
-	int buttonState = 0;         // variable for reading the pushbutton status
-	
-Now in setup we want to initialize the LED as an output, the button. We then add Bridge.begin(), which is a blocking function, nothing else will happen in your sketch until your bridge starts facilitating communication between the AVR and Linux processor. This should be called once in setup(). Next, Serial.begin() sets the data rate in bits per second for serial data transmission. In this case we will choose 9600. Lastly, we add while(!Serial), because we only want to move on if the serial connection is open. My complete setup looks like this:
+![image](/Users/nyjetsjustin/Desktop/Views1.png)
 
-	void setup() {
-  		// initialize the LED pin as an output:
-  		pinMode(ledPin, OUTPUT);
-  		// initialize the pushbutton pin as an input:
-  		pinMode(buttonPin, INPUT);
-  
-  		Bridge.begin();
-  		Serial.begin(9600);
-  		while(!Serial);
-	}
-	
-Now, we need to construct the loop part of our sketch. We want to do something when there is a button press obviously. Specifically, when the button gets pressed  we want to send a secret password to our PubNub channel as well as light up the LED for as a nice aesthetic confirmation. Here is how my loop looks:
+We also want to provide new users the ability to Sign Up. We do so by dragging a UIButton to the Login View and title it Sign Up.
 
-	void loop() {
-	
-		//initialize  a basic HTTP client that connects to the internet
-  		HttpClient client;
-  		
-  		// read the state of the pushbutton value:
-  		buttonState = digitalRead(buttonPin);
+Now, we want to make sure that our main view is protected and that the user must be signed in to see the main page. To do so we need to embed the Signed In View in a view controller. We do so by clicking on the view, and going to <br>
+Editor->Embed In->Navigation View Controller. 
 
-  		// check if the pushbutton is pressed.
-  		// if it is, the buttonState is HIGH:
-  		if (buttonState == HIGH) {
-    		
-    		// turn LED on:
-    		digitalWrite(ledPin, HIGH);
-    		
-    		//Fill in your keys and publish to PubNub
-    		client.get("http://pubsub.pubnub.com
-			/publish
-			/pub-key
-			/sub-key
-			/signature
-			/channel
-			/callback
-			/message");
-			
-			//As long as there are bytes from the server in the client buffer, read the bytes and print them to the serial monitor.
-    		while (client.available()) {
-        		char c = client.read();
-        		Serial.print(c);
-    		}
-    		Serial.print('\n');
-    		Serial.flush();
-  		}
-  		//But if there is no button being pressed
-  		else {
-    		// turn LED off:
-    		digitalWrite(ledPin, LOW);
-  		}
-  		//repeat every 5 seconds
-  		delay(5000);
-	}
+Since we want the Login View to appear on top, or before, the Signed In page, we must add a segue. To do so, we Control Click from the Signed In View Controller and drag to the Login View Controller, and select present modally. We click on the segue arrow and give it an identifier: loginViewSegue. This method will ensure that Login View will appear on top of the Signed In view. Now your Storyboard should look like this:
+![image](/Users/nyjetsjustin/Desktop/Views2.png)
+
+We additionally need a view to allow new users to Sign Up, so we drag a new View Controller beneath our Login View. This view will be very similar to our Sign Up view, however we add one more field and label for Phone Number, and only one button for Sign Up. We should also account for Users who clicked Sign Up perhaps by accident, so we add a new button onto the view which we label Back To Login.
+
+From the Login View, we click on the Sign Up button and Control Click and drag to Sign Up View and again choose Present Modally. We give the segue an identifier: SignUpViewSegue
+
+We can test if our work so far works by clicking on our Signed In View, selecting the Assistant editor, and pasting the following code: 
+
+	 override func viewDidAppear(animated: Bool) {
+     	self.performSegueWithIdentifier("loginViewSegue", sender: self)
+    }
+
+Run the app and try it for yourself. Immediately you should see the Login page will appear. 
+
+We now need to add a new file. So click <br>File->New->File->Cocoa Touch Class->Next.<br> Give it Class: SignUpViewController, Subclass of: UIViewController and Language: Swift and create.
+
+Back in the storyboard we must connect the Sign Up View to the SignUpViewController. We do so by clicking on the Sign Up View and giving it class: SignUpViewController. Now click on the assistant editor. In the assistant editor we begin to connect all of our text fields by doing Control Click and dragging the textfields above our ViewDidLoad() function. I used common sense names for the outlets like: usernameTextField, passwordTextField. We then Control Click and drag out SignUp button , make it an action not an outlet, and give it name SignUpButtonTapped. Paste the following code into your SignUpViewController: 
 		
-		
-Lets look further at the client.get() line. What I am doing is essentially publishing to PubNub by doing a HTTP get request. 
+	@IBAction func SignUpButtonTapped(sender: AnyObject) {
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+        
+        //Check for empty fields
+        if(username.isEmpty || password.isEmpty){
+            //Display alert message
+            displayAlertMessage("All Fields are Required")
+            
+            return
+        }
+        
+        //Store data
+        
+    }
+    
+    func displayAlertMessage(myMessage:String){
+    
+        var myAlert = UIAlertController(
+        	title: "Alert", 
+        	message: myMessage, 	
+        	preferredStyle:UIAlertControllerStyle.Alert)
+        
+        let okAction = UIAlertAction(
+        	title: "OK", 
+        	style: UIAlertActionStyle.Default, 
+        	handler: nil)
+        
+        myAlert.addAction(okAction)
+        
+        self.presentViewController(
+        	myAlert, 
+        	animated: true, 
+        	completion: nil)
+    }
 
-For more information on this check out: 
-<http://www.pubnub.com/http-rest-push-api/> and also <http://www.arduino.cc/en/Tutorial/HttpClient>
+At this point our screen only checks that a user has entered ***any information***, and will display an error only if a field is left empty. In your app you may also want to do a check here on the information which is entered (ie. Username is not already taken, password is X characters long ... etc). Since it is now necessary to store our data in a backend, so we will go ahead and set up Parse!
 
-You should go to your dev console, put in the same pub_key,sub_key and channel you entered into your sketch and check that the button press is in fact publishing to PubNub. If it is then the hard part is done! 
+###Using Swift to connect to Parse.com
 
-My final sketch looks like this, you should not I am posting to Sub_key:demo, Pub_key:demo, Channel: hi_world and the message I am sending is "abc" :
+If you do not have an account with Parse.com, now is the time to make one. Parse is an initially free service and does not take long to register. 
 
-<script src="https://gist.github.com/justinplatz/19014bf7705253e8fd03.js"></script>
+Once you are signed in go back to the Parse.com log in area and select the Settings from the navigation pane. On this page, down the left hand side you will see another menu structure. We need to click the Keys link.
 
-###Automating Amazon Ordering
+You will then be shown quite a few different application keys. The ones we want are the Application ID and the Client Key.
 
-####Ordering With Zinc
-You may be wondering how I went about ordering from Amazon, and the answer is <http://Zinc.io> . Zinc has a super easy to use API which essentially handled all of the Amazon order process easily and seamlessly. What you need to do is check out their Github Repo at : <https://github.com/wangjohn/zinc_cli> and for instructions about installing Zinc.
+With these, we now need to go to the AppDelegate.swift in Xcode and change this function:
 
-Next, you will probably want to go ahead and request an API token, which is free, and took me only 1 business day to get a response back. Quick & easy, Zinc is perfect for this project. While you are waiting there is an also free demo token you can use. 
 
-Once you have Zinc installed, and have a API token the next thing you'll want to do is set up your order request. Open your favorite text editor and fill in the blanks and then save this as a JSON object into your project folder:
+	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        return true
+    }
+    
+by adding the following line into the function:
 
-<script src="https://gist.github.com/justinplatz/b59ded9fd7e4202f9c66.js"></script>
+			Parse.setApplicationId(“your_application_key”, clientKey: “your_client_key”)
 
-Fill the JSON file out just one time and you won't need to open it again so long as you don't need to alter any of the information. 
+Next, replace your_application_key and your_client_key with the keys that we just got from the Parse Keys link.
 
-Finding the Product ID of your product is different depending on what country you are in, so you may want to google how to find it in your country.
+Setting up Parse with Swift is pretty much that easy! 
 
-In the repo they show you how to order from the command line:
+We want to use Parse to manage our user registration so on Parse.com click Data -> Add Class and select User. 
+
+Also go ahead and create a new class named Relation which has two Col's of type String named Sender & Friend (we will use this later to manage user relationships).
+
+Lets go back into our SignUpViewController and visit the SignUpButtonTapped function and change it as follows:
+
+	@IBAction func SignUpButtonTapped(sender: AnyObject) {
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+        
+        //Check for empty fields
+        if(username.isEmpty || password.isEmpty){
+            //Display alert message
+            displayAlertMessage("All Fields are Required")
+            
+            return
+        }
+        
+        //Create and store data
+        var newUser = PFUser()
+        newUser.username = username
+        newUser.password = password
+        
+        newUser.signUpInBackgroundWithBlock {
+            (succeeded: Bool, error: NSError?) -> Void in
+            if (error == nil) {
+                dispatch_async(dispatch_get_main_queue()) {
+                   self.dismissViewControllerAnimated(true, completion: nil)
+                }
+                
+            } 
+            else {                
+                if (let message: AnyObject = error!.userInfo["error"]) {
+                    self.displayAlertMessage("There is an Error")
+                }
+            }
+        }
+        
+    }
+    
+If you try running the app, and Signing up you should notice the User information being stored in your data on Parse.com 
+
+Now that we can Sign Up, we also need to be able to Log In. We go to our storyboard, click on Log In View and select Create File->Cocoa Touch Class. Give the file Class:LogInViewController and Subclass Of: UIViewController and Language: Swift.
+
+In our LogInViewController we should now go ahead and connect our textfields, and connect the Login button by giving it an action called loginButtonTapped. We add the following code:
+
+
+	    @IBAction func loginButtonTapped(sender: AnyObject) {
+        
+        let usrName = usernameTextField.text
+        let pWord = passwordTextField.text
+        
+        //Validate Username and Password
+        PFUser.logInWithUsernameInBackground(usrName, password:pWord) {
+            (user: PFUser?, error: NSError?) -> Void in
+            if user != nil {
+                // Do stuff after successful login.
+                
+                var currentUser = PFUser.currentUser()
+                isUserLoggedIn = true
+                var usrname = currentUser?.username
+                
+                var query = PFQuery(className:"Relation")
+                query.whereKey("Sender", equalTo : usrname!)
+                query.findObjectsInBackgroundWithBlock {
+                    (objects: [AnyObject]?, error: NSError?) -> Void in
+                    
+                    if error == nil {
+                        // The find succeeded.
+                        if let objects = objects as? [PFObject] {
+                            for object in objects {
+                                var friendName = object["Friend"] as! String
+                                friendsArray.append(friendName)
+                            }
+                        }
+                    }
+                    else {
+                        // Log details of the failure
+                        println("There is an error in the query it is Error: \(error!) \(error!.userInfo!)")
+                    }
+                }
+                
+                ViewController().setChannel(currentUser!)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+                
+                
+            } else {
+                // The login failed. Check error to see why.
+                self.displayAlertMessage("Username Or Password Is Incorrect")
+            }
+        }
+    }
+    
+In my version of the app I added a  global variable "isUserLoggedIn" to keep track of whether the User is logged in, so above the class 
+
+	class LogInViewController: UIViewController, UITextFieldDelegate{
+ we add this line:
+
+	var isUserLoggedIn = false
 	
-	($python -m zinc -s -f examples/simple_order.json)
-You should try that now just to make sure your JSON file is properly filled out. If it is, then when you execute this line you should soon see an email confirmation of your purchase within a few minutes. Do not move on to the next step until you have done this at least once. Don't worry its very easy to cancel a purchase if it works (I did it about 10x during testing).
+Now we can go back into  our original ViewController and edit our ViewDidAppear function to check if the user must log in like this:
+	
+	override func viewDidAppear(animated: Bool) { 
+        if(!isUserLoggedIn){
+            self.performSegueWithIdentifier("loginViewSegue", sender: self)
+        }
+    }
 
-####Creating Our Webpage
+Lastly, we need to give a user the ability to log out. So we go back to our storyboard and click on our SignedIn View. From the components library we drag a Bar Button onto the top left corner. Lets change the title of this button from Item to Log Out. We control drag the LogOut button to our view controller and give it an action LogOutButtonTapped. In that function we simply add:
 
-In my project I created a static webpage which is subscribed to the same PubNub channel as my Arduino is publishing to. My page asks me if I really did intend to click the button, if I click yes then I use a PHP file to check that the message received contained my secret password, and if all goes well then I run a process called Order.php which uses Zinc to place the order.
-
-First, Ill show you how I set up my Order.php file: 
-
-<script src="https://gist.github.com/justinplatz/3f04e0f4f24d3de983fd.js"></script>
-
-The first thing I do is check that the message I received from the channel is equal to my secret password, in this case "abc". The reason I do this is so that other people cannot order me things on Amazon without knowing my password, and since I do this check in my PHP file it will not appear to anyone viewing the site.  
-
-As this is a PHP file you will need a server to test. I use MAMP for this. If you go to your local host and run Order.php?p=Your_Password then it should actually process the order... check for your receipt and confirm. 
-
-In my variation of the Flash Button, I created a static webpage which is waiting to receive the published message from the Arduino and then presents me with an option to confirm or reject the order. However, to emulate the Dash button even further one could use Twilio to send a text message with the confirmation/rejection or even make a native app for this. 
-
-Let me show you the key components you'll need for your webpage.
-
-First, connecting to PubNub is super easy with JavaScript. All you do is add this to your body: 
-  
-  	<script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
-  	
- And then create a script and add this:
+        currentUser = PFUser.currentUser()
+        
+By now your app should be able to switch between Login and Signup, check for empty fields and respond with alerts, store user data into Parse, and finally take us into the app upon valid login.
  
-   	var pubnub = PUBNUB.init({
-      publish_key: 'demo',
-      subscribe_key: 'demo'
-    });
+ ![image](/Users/nyjetsjustin/Downloads/IMG_1429.gif)
 
-Just like that you are connected to PubNub! But we want to add a little more logic to our page, so what I did was upon receiving a message from PubNub:
-	
-	* Hide h1 header
-	* Show Alert box
+In the next part of this tutorial I will show you how to populate your UITableView using Parse and then after that in <***Part Two***> we will use PubNub to allow users to send YoPub! Push Notifications!
 
-Then my Alert box has Yes and No Buttons each run a different script upon being selected.
+### Creating the YoPub! Table View
 
-Heres what my page looks like after I stripped away all unnecessary styling elements:
+Click on Main.storyboard, in the lower right corner drag a **Table View** onto the storyboard and drag it to cover the Signed In View Controller.
 
-<script src="https://gist.github.com/justinplatz/f487d962dd50b9f0682e.js"></script>
+Next, connect the Table View to an outlet in ViewController.swift: show the Assistant Editor, select the Table View, control-drag from it into ViewController.swift, just inside the class block, and name the outlet yoTableView.
 
-Thats it! You should be able to Press your button, see a confirmation box appear on your webpage and be able to order from amazon with just one button press. Its ok to be excited. Binge shopping has literally never been so easy. What is particularly good to note is that you can very easily change the item your button is set to order by simply changing the product_Id in the JSON object. My Github Repo (<https://github.com/justinplatz/FlashButton>) will have all of my styling for you to access. 
+The YOPub! UI is essentially just a table field with the user's Friends, so in the table you need to create a cell to represent each Friend. 
 
-If you have any questions or comments I would love to hear them! Please email me at: justin@pubnub.com 
+So were going to need to be able to add friends, right?
+
+Lets drag another bar button onto the top right corner. We change the identifier from Custom to Add because it looks fancy.  And we connect the Add button to our ViewController and give it an action called AddButtonTapped. Now we will define the action for when we click to add a new friend.
+
+
+
+<script src="https://gist.github.com/justinplatz/bfb2b4cb4a7c811bb102.js"></script>
+
+Before this will work properly we will need to add some UITableView functions into our code. First, on the storyboard click on the Cell and give it the identifier "Cell". Now, go ahead and add the following: 
+    
+       func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return friendsArray.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        (cell as! TableViewCell).usernameLabel.text = friendsArray[indexPath.row] as String
+              
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    }
+    
+        
+        
+On our cell we want to place a label which will be used to represent our friend's username.
+We also want to create a new file named TableViewCell.swift which is of type UITableViewCell. The code for this file should look like this: 
+
+	import UIKit
+
+
+	class TableViewCell: UITableViewCell {
+    
+    //Make sure you connect your cell label from the Storyboard to this
+    @IBOutlet weak var usernameLabel: UILabel!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        // Initialization code
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
+    }
+    
+    
+	}
+
+At this point when we sign in we should see a table filled with friends! And we can even check if we are adding a friend with an invalid username. 
+![image](/Users/nyjetsjustin/Downloads/IMG_1430.gif)
+
+That means we are more than halfway done to making our YoPub! app. 
+
+All we need to do now is to incorporate PubNub to simplify how we will send our YoPub Push Notifications to our friends.
+
+-----
+# (2/2) Using PubNub for Simplified Swift Push Notifications
+
+
+Before we go any further it is very important that you set up push notifications for your project through Apple. If you have never done this before there are clear instructions on how to do so at: <https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/ConfiguringPushNotifications/ConfiguringPushNotifications.html> This will require you have an Apple dev membership and getting a few .certs. For a first timer this can be a headache but this process unfortunately must be done for all iOS apps which will use push notifications. 
+
+You will also need to enable Push Notifications on your PubNub account. This can be done at <https://admin.pubnunb.com>
+
+Now then...
+
+
+The PubNub iOS SDK should already be present in our project. Our goal now is to be able to click on a friends name  from the TableView and send them a YoPub! Push Notification. Luckily for us both, PubNub makes this functionality really easy to do, and although I will only cover how to send push notifications to one person at a time, it is just as simple to send notifications to larger groups all at once. 
+
+I'm going to teach you the bare necessities of setting up Push Notifications in your Swift app, and how to use PubNub to simplify the process of managing the Push Notifications. If you skipped Part 1 then you should go back and check out how to install the necessary CocoaPods, and also how to set up your Bridging Header. Now, if you are just interested in the nitty, gritty and want the code you can clone my repo at <https://github.com/justinplatz/yopub>.
+
+Lets go back into our AppDelegate. Beneath the class, but outside of any function we need to add the following code to initialize an instance of PubNub like so: 
+
+    var client:PubNub?
+    
+    
+Here we are initializing an instance of PubNub and naming it client. We will use client to handle most of our PubNub related functionality.
+
+Lets go back into our didFinishLaunchingWithOptions function. We want to have our app request to enable push notifications, we can do this by adding the following lines:
+
+<script src="https://gist.github.com/justinplatz/671d9671c6a815e1ccbc.js"></script>
+
+We need a few more functions into our AppDelegate, here they are:
+
+<script src="https://gist.github.com/justinplatz/63bfee036c9748ab9293.js"></script>
+
+        
+If you are unfamiliar with what a Push Notification composition looks like, take a gander at this: 
+![image](/Users/nyjetsjustin/Desktop/views4.png)
+
+The way we will set up our push notifications is most similar to Example 2, using an aps dictionary. Looking closer at the didReceiveRemoteNotification you can see we are setting up our Push Notification alert. Since every Push Notification simply says "YoPub!" we set the alert.message to be "YoPub!". Our alert.title will show us who sent us the message we get from userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String . 
+
+Now that our AppDelegate is all setup to receive Push Notifications we should go back into our ViewController and create a way to actually send the Push Notifications. 
+    
+We need to go back into the ViewDidLoad Function and add a few things to configure our instance of PubNub:
+  
+<script src="https://gist.github.com/justinplatz/2d4c6c4d7cf839561f1b.js"></script>
+
+We need to subscribe to the right channels when we login each time so back in the LoginViewController we will edit our loginButtonTapped like so:
+
+<script src="https://gist.github.com/justinplatz/4538f5e0c10bdf15a62e.js"></script>
+
+In the case of YoPub!, when a user signs out, he should be unsubscribed from all channels, so we need to go back into ViewController and edit the LogOutButtonTapped and adjust it to contain:
+
+<script src="https://gist.github.com/justinplatz/908f19d85ec4ee3b33ab.js"></script>
+
+Our app is nearly done! But we still need to send the Push Notifications when we click on a friends name. Lets go back to our didSelectRowAtIndexPath function in the ViewController. We add the following:
+
+<script src="https://gist.github.com/justinplatz/903c238bd5356c179297.js"></script>
+        
+ We can now send Push Notifications! Go ahead and try it out... a simple way is to add yourself as a friend and try sending one. It is also useful to utilize the Console at <http://www.PubNub.com/Console> to send push notifications to your phone, and checking that they are showing up as expected. 
+
+
+Push Notifications are a powerful tool in a developers toolbox. Many apps experience a large customer base of inactive users who have downloaded the app but do not use it daily. Push notifications allow developers to provide up-date relevant information to users, encouraging engagement, increasing recognition and increasing involvement. They are certainly a good method to keeping your app fresh in the users focus, and PubNub can be an invaluable tool in this process. 
+
+Should you have any questions about my finished project, my entire code can be viewed and downloaded at: <https://github.com/justinplatz/yopub>
+
+
