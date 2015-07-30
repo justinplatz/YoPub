@@ -57,14 +57,8 @@ import CloudKit
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-
-        println("Getting notification")
-        
         var message: NSString = ""
         var alert: AnyObject? = userInfo["aps"]
-        
-        println(userInfo["aps"])
-
         if((alert) != nil){
             var alert = UIAlertView()
             alert.title = userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String

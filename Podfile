@@ -5,7 +5,7 @@ target 'yopub' do
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod 'PubNub', :git => 'https://github.com/pubnub/objective-c.git', :branch => '4.0b2'
+pod 'PubNub', '~>4.0'
 pod 'Parse', '~> 1.7'
 
 

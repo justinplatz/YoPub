@@ -82,9 +82,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "sound":"default"]
         ]
         
-        println(friendsArray[indexPath.row] as String)
-        println(payload)
-        
         let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
         
         appDel.client?.publish(
@@ -122,7 +119,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
        
         let appDel = UIApplication.sharedApplication().delegate! as! AppDelegate
         
-        appDel.client?.removeListeners([self])
         appDel.client?.removeAllPushNotificationsFromDeviceWithPushToken(tokenID, andCompletion: nil)
         
         let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
@@ -157,7 +153,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             else{
                 var newRelation = PFObject(className: "Relation")
-                println(PFUser.currentUser()?.username)
                 newRelation["Sender"] = PFUser.currentUser()?.username
                 newRelation["Friend"] = inputTextField!.text
                 newRelation.saveInBackgroundWithBlock {
@@ -180,6 +175,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //Present the AlertController
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
+    
+  
     
 }
 

@@ -54,18 +54,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 // Do stuff after successful login.
                 
                 var currentUser = PFUser.currentUser()
-                println(currentUser?.username)
-
-                if currentUser != nil {
-                    // Do stuff with the user
-                } else {
-                    // Show the signup or login screen
-                }
-                
                 isUserLoggedIn = true
                 var usrname: String! = currentUser!.username as String!
                 
-                println("Current user is " + usrname!)
                 var query = PFQuery(className:"Relation")
                 query.whereKey("Sender", equalTo : usrname!)
                 query.findObjectsInBackgroundWithBlock {
@@ -76,12 +67,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                         if let objects = objects as? [PFObject] {
                             for object in objects {
                                 var friendName = object["Friend"] as! String
-                                //println(friendName)
                                 friendsArray.append(friendName)
-                                
-                                //let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
-                                //appDel.client?.publish("Online", toChannel: friendName, withCompletion: nil)
-
                             }
                         }
                     }
@@ -94,8 +80,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate, PNObjectEventL
                 let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
 
                 let deviceToken: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("deviceToken")
-
-                appDel.client?.addListeners([self])
                 
                 ///// 
                 // First lets remove all channels
