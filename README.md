@@ -1,4 +1,4 @@
-![image](bannerBlog.png)
+![image](ReadMe/bannerBlog.png)
 
 # (1/2) Using PubNub for Simplified Swift Push Notifications
 
@@ -84,7 +84,7 @@ First we are going to design the basic UI of the Login and Sign Up view. We will
 
 Next we will create the Login and Sign Up views. We begin by dragging a new View Controller onto the storyboard. On this new View Controller, we drag three UI Labels and title them "Login View","Username","Password". We add UITextfields beneath the "Username" and "Password" labels so users can enter their information.  Then, we drag a UIButton onto the view and label it Login. Your Storyboard should now look similar to this:
 
-![image](Views1.png)
+![image](ReadMe/Views1.png)
 
 We also want to provide new users the ability to Sign Up. We do so by dragging a UIButton to the Login View and title it Sign Up.
 
@@ -92,7 +92,7 @@ Now, we want to make sure that our main view is protected and that the user must
 Editor->Embed In->Navigation View Controller. 
 
 Since we want the Login View to appear on top, or before, the Signed In page, we must add a segue. To do so, we Control Click from the Signed In View Controller and drag to the Login View Controller, and select present modally. We click on the segue arrow and give it an identifier: loginViewSegue. This method will ensure that Login View will appear on top of the Signed In view. Now your Storyboard should look like this:
-![image](Views2.png)
+![image](ReadMe/Views2.png)
 
 We additionally need a view to allow new users to Sign Up, so we drag a new View Controller beneath our Login View. This view will be very similar to our Sign Up view, however we add one more field and label for Phone Number, and only one button for Sign Up. We should also account for Users who clicked Sign Up perhaps by accident, so we add a new button onto the view which we label Back To Login.
 
@@ -286,7 +286,7 @@ Lastly, we need to give a user the ability to log out. So we go back to our stor
         
 By now your app should be able to switch between Login and Signup, check for empty fields and respond with alerts, store user data into Parse, and finally take us into the app upon valid login.
  
- ![image](IMG_1429.gif)
+ ![image](ReadMe/IMG_1429.gif)
 
 In the next part of this tutorial I will show you how to populate your UITableView using Parse and then after that in <***Part Two***> we will use PubNub to allow users to send YoPub! Push Notifications!
 
@@ -360,7 +360,7 @@ We also want to create a new file named TableViewCell.swift which is of type UIT
 	}
 
 At this point when we sign in we should see a table filled with friends! And we can even check if we are adding a friend with an invalid username. 
-![image](IMG_1430.gif)
+![image](ReadMe/IMG_1430.gif)
 
 That means we are more than halfway done to making our YoPub! app. 
 
@@ -398,7 +398,7 @@ We need a few more functions into our AppDelegate, here they are:
 
         
 If you are unfamiliar with what a Push Notification composition looks like, take a gander at this: 
-![image](views4.png)
+![image](ReadMe/views4.png)
 
 The way we will set up our push notifications is most similar to Example 2, using an aps dictionary. Looking closer at the didReceiveRemoteNotification you can see we are setting up our Push Notification alert. Since every Push Notification simply says "YoPub!" we set the alert.message to be "YoPub!". Our alert.title will show us who sent us the message we get from userInfo["aps"]!.objectForKey("alert") as AnyObject? as! String . 
 
